@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Plus, Wine } from 'lucide-react';
+import { batchAPI } from './api';
 
 // Utility functions for calculations
 const calculateABV = (og, fg) => {
@@ -86,22 +87,28 @@ const MeadBatchTracker = () => {
     const [selectedBatch, setSelectedBatch] = useState(null);
     const [showNewBatchForm, setShowNewBatchForm] = useState(false);
     const [displayCount, setDisplayCount] = useState(10);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const observerTarget = useRef(null);
 
     useEffect(() => {
-        const saved = localStorage.getItem('meadBatches');
-        if (saved) {
-            const parsed = JSON.parse(saved);
-            setBatches(parsed);
-            setDisplayedBatches(parsed.slice(0, 10));
-        }
+        loadBatches();
     }, []);
 
-    useEffect(() => {
-        if (batches.length > 0) {
-            localStorage.setItem('meadBatches', JSON.stringify(batches));
+    const loadBatches = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+            const data = await batchAPI.getAllBatches();
+            setBatches(data);
+            setDisplayedBatches(data.slice(0, 10));
+        } catch (err) {
+            console.error('Error loading batches:', err);
+            setError('Failed to load batches. Make sure the server is running.');
+        } finally {
+            setLoading(false);
         }
-    }, [batches]);
+    };
 
     useEffect(() => {
         setDisplayedBatches(batches.slice(0, displayCount));
@@ -124,21 +131,35 @@ const MeadBatchTracker = () => {
         return () => observer.disconnect();
     }, [displayCount, batches.length]);
 
-    const addBatch = (batchData) => {
-        const newBatch = {
-            ...batchData,
-            id: Date.now(),
-            startDate: new Date().toISOString(),
-            gravityReadings: []
-        };
-        setBatches([newBatch, ...batches]);
-        setShowNewBatchForm(false);
+    const addBatch = async (batchData) => {
+        try {
+            const newBatch = {
+                ...batchData,
+                id: Date.now(),
+                startDate: new Date().toISOString(),
+                gravityReadings: []
+            };
+            await batchAPI.createBatch(newBatch);
+            setBatches([newBatch, ...batches]);
+            setShowNewBatchForm(false);
+        } catch (err) {
+            console.error('Error adding batch:', err);
+            setError('Failed to create batch');
+        }
     };
 
-    const updateBatch = (batchId, updates) => {
-        setBatches(batches.map(b => b.id === batchId ? { ...b, ...updates } : b));
-        if (selectedBatch?.id === batchId) {
-            setSelectedBatch({ ...selectedBatch, ...updates });
+    const updateBatch = async (batchId, updates) => {
+        try {
+            const batchToUpdate = batches.find(b => b.id === batchId);
+            const updatedBatch = { ...batchToUpdate, ...updates };
+            await batchAPI.updateBatch(batchId, updatedBatch);
+            setBatches(batches.map(b => b.id === batchId ? updatedBatch : b));
+            if (selectedBatch?.id === batchId) {
+                setSelectedBatch(updatedBatch);
+            }
+        } catch (err) {
+            console.error('Error updating batch:', err);
+            setError('Failed to update batch');
         }
     };
 
@@ -163,7 +184,17 @@ const MeadBatchTracker = () => {
                     </button>
                 </div>
 
-                {displayedBatches.length === 0 ? (
+                {error && (
+                    <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
+                        {error}
+                    </div>
+                )}
+
+                {loading ? (
+                    <div className="text-center py-12 text-gray-500">
+                        <p>Loading batches...</p>
+                    </div>
+                ) : displayedBatches.length === 0 ? (
                     <div className="text-center py-12 text-gray-500">
                         <Wine size={48} className="mx-auto mb-4 opacity-50" />
                         <p>No batches yet. Start your first batch!</p>
@@ -642,3 +673,4 @@ const BatchDetail = ({ batch, onBack, onUpdate }) => {
 };
 
 export default MeadBatchTracker;
+
