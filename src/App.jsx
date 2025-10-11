@@ -47,7 +47,7 @@ const BatchCard = ({ batch, onClick }) => {
         <div onClick={onClick} className="bg-white border rounded-lg p-4 cursor-pointer hover:shadow-md transition-shadow">
             <div className="flex justify-between items-start mb-3">
                 <div>
-                    <h3 className="font-semibold text-lg">Batch #{batch.id}</h3>
+                    <h3 className="font-semibold text-lg">{batch.name}</h3>
                     <p className="text-sm text-gray-500">{new Date(batch.startDate).toLocaleDateString()}</p>
                 </div>
                 {getStatusBadge()}
@@ -135,7 +135,6 @@ const MeadBatchTracker = () => {
         try {
             const newBatch = {
                 ...batchData,
-                id: Date.now(),
                 startDate: new Date().toISOString(),
                 gravityReadings: []
             };
@@ -217,14 +216,17 @@ const MeadBatchTracker = () => {
 };
 
 const NewBatchForm = ({ onSave, onCancel }) => {
+    const id = Date.now()
     const [formData, setFormData] = useState({
+        id: id,
+        name: 'Batch #' + id,
         carboySizeGal: 1,
         honeyLbs: '',
         otherIngredients: ''
     });
 
     const handleSubmit = () => {
-        if (formData.honeyLbs && formData.carboySizeGal) {
+        if (formData.honeyLbs && formData.carboySizeGal && formData.name) {
             onSave({
                 ...formData,
                 honeyLbs: parseFloat(formData.honeyLbs),
@@ -237,6 +239,16 @@ const NewBatchForm = ({ onSave, onCancel }) => {
         <div className="min-h-screen bg-gray-50 p-4">
             <div className="max-w-2xl mx-auto bg-white rounded-lg shadow p-6">
                 <h2 className="text-2xl font-bold mb-6">New Batch</h2>
+                <div>
+                    <label className="block text-sm font-medium mb-1">Name</label>
+                    <textarea
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        className="w-full border rounded px-3 py-2"
+                        rows="1"
+                        placeholder="short name"
+                    />
+                </div>
                 <div className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium mb-1">Carboy Size (gallons)</label>
@@ -368,8 +380,7 @@ const BatchDetail = ({ batch, onBack, onUpdate }) => {
                 </button>
 
                 <div className="bg-white rounded-lg shadow p-6 mb-4">
-                    <h2 className="text-2xl font-bold mb-4">Batch #{batch.id}</h2>
-
+                    <h2 className="text-2xl font-bold mb-4">{batch.name}</h2>
                     <div className="grid grid-cols-2 gap-4 mb-6">
                         <div>
                             <p className="text-sm text-gray-600">Started</p>
