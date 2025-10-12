@@ -1,0 +1,40 @@
+{
+  "id": 1760311243651,
+  "name": "Ginger Hydromel",
+  "carboySizeGal": 1,
+  "honeyLbs": 1,
+  "otherIngredients": "gigner",
+  "startDate": "2025-10-12T23:21:46.415Z",
+  "gravityReadings": [],
+  "originalGravity": 1.032,
+  "ogDate": "2025-10-12T23:21:55.017Z",
+  "tosnaSchedule": [
+    {
+      "hours": 24,
+      "amount": "1.00"
+    },
+    {
+      "hours": 48,
+      "amount": "1.00"
+    },
+    {
+      "hours": 72,
+      "amount": "1.00"
+    }
+  ],
+  "finalGravity": 0.994,
+  "fgDate": "2025-10-12T23:22:08.088Z",
+  "abv": "4.99",
+  "stabilizers": {
+    "kMeta": "0.50",
+    "kSorbate": "0.75"
+  },
+  "stabilizationType": "pasteurized",
+  "stabilizationDate": "2025-10-12T23:22:15.629Z",
+  "backsweetenHoneyLbs": 0,
+  "backsweeteningSG": 1.016,
+  "otherBacksweetenIngredients": "",
+  "backsweetenDate": "2025-10-12T23:22:28.724Z",
+  "packageType": "kegged",
+  "packageDate": "2025-10-12T23:22:35.726Z"
+}

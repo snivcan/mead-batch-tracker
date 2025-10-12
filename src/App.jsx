@@ -2,6 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Plus, Wine } from 'lucide-react';
 import { batchAPI } from './api';
 
+const stabilizationTypes = {
+    pasteurized: 'Pasteurization',
+    chemical_stabilization: 'Chemical Stabilization'
+}
+
+const packageTypes = {
+    bottled: 'Bottled',
+    kegged: 'Kegged'
+}
+
 // Utility functions for calculations
 const calculateABV = (og, fg) => {
     return ((og - fg) * 131.25).toFixed(2);
@@ -28,13 +38,13 @@ const calculateStabilizers = (carboySizeGal) => {
 
 const BatchCard = ({ batch, onClick }) => {
     const getStatusBadge = () => {
-        if (batch.kegged || batch.bottled) {
+        if (batch.packageDate) {
             return <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-medium">Finished</span>;
         }
-        if (batch.backsweeteningSG) {
+        if (batch.backsweetenDate) {
             return <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded text-xs font-medium">Backsweetened</span>;
         }
-        if (batch.finalGravity) {
+        if (batch.stabilizationDate) {
             return <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs font-medium">Stabilized</span>;
         }
         if (batch.originalGravity) {
@@ -305,15 +315,18 @@ const BatchDetail = ({ batch, onBack, onUpdate }) => {
     const [showOGForm, setShowOGForm] = useState(false);
     const [showGravityForm, setShowGravityForm] = useState(false);
     const [showFGForm, setShowFGForm] = useState(false);
+    const [showStabilizationForm, setShowStabilizationForm] = useState(false);
     const [showBacksweetenForm, setShowBacksweetenForm] = useState(false);
     const [showBottleForm, setShowBottleForm] = useState(false);
 
     const [ogValue, setOgValue] = useState('');
     const [gravityValue, setGravityValue] = useState('');
     const [fgValue, setFgValue] = useState('');
+    const [stabilizationType, setStabilizationType] = useState('pasteurized');
     const [backsweetAmount, setBacksweetAmount] = useState('');
     const [backsweetSG, setBacksweetSG] = useState('');
     const [packageType, setPackageType] = useState('bottled');
+    const [otherBacksweetenIngredients, setOtherBacksweetenIngredients] = useState('');
 
     const handleAddOG = () => {
         const og = parseFloat(ogValue);
@@ -357,6 +370,18 @@ const BatchDetail = ({ batch, onBack, onUpdate }) => {
         onUpdate(batch.id, {
             backsweetenHoneyLbs: parseFloat(backsweetAmount),
             backsweeteningSG: parseFloat(backsweetSG),
+            otherBacksweetenIngredients: otherBacksweetenIngredients,
+            backsweetenDate: new Date().toISOString()
+        });
+        setShowBacksweetenForm(false);
+        setBacksweetAmount('');
+        setBacksweetSG('');
+        setOtherBacksweetenIngredients('')
+    };
+
+    const skipBacksweeten = () => {
+        onUpdate(batch.id, {
+            backsweetenSkipped: true,
             backsweetenDate: new Date().toISOString()
         });
         setShowBacksweetenForm(false);
@@ -366,10 +391,26 @@ const BatchDetail = ({ batch, onBack, onUpdate }) => {
 
     const handlePackage = () => {
         onUpdate(batch.id, {
-            [packageType]: true,
+            packageType: packageType,
             packageDate: new Date().toISOString()
         });
         setShowBottleForm(false);
+    };
+
+    const handleStabilization = () => {
+        onUpdate(batch.id, {
+            stabilizationType: stabilizationType,
+            stabilizationDate: new Date().toISOString()
+        });
+        setShowStabilizationForm(false);
+    };
+
+    const skipStabilization = () => {
+        onUpdate(batch.id, {
+            stabilizationSkipped: true,
+            stabilizationDate: new Date().toISOString()
+        });
+        setShowStabilizationForm(false);
     };
 
     return (
@@ -527,23 +568,25 @@ const BatchDetail = ({ batch, onBack, onUpdate }) => {
                                 </div>
                             </div>
                         )}
+
+                        {batch.finalGravity && (
+                            <div className="grid grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <p className="text-sm text-gray-600">Final Gravity</p>
+                                    <p className="font-medium">{batch.finalGravity.toFixed(3)}</p>
+                                </div>
+                                <div>
+                                    <p className="text-sm text-gray-600">ABV</p>
+                                    <p className="font-medium">{batch.abv}%</p>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
 
                 {batch.finalGravity && (
                     <div className="bg-white rounded-lg shadow p-6 mb-4">
                         <h3 className="text-xl font-bold mb-4">Stabilization</h3>
-
-                        <div className="grid grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <p className="text-sm text-gray-600">Final Gravity</p>
-                                <p className="font-medium">{batch.finalGravity.toFixed(3)}</p>
-                            </div>
-                            <div>
-                                <p className="text-sm text-gray-600">ABV</p>
-                                <p className="font-medium">{batch.abv}%</p>
-                            </div>
-                        </div>
 
                         {batch.stabilizers && (
                             <div className="p-3 bg-purple-50 rounded mb-4">
@@ -552,22 +595,95 @@ const BatchDetail = ({ batch, onBack, onUpdate }) => {
                                 <p className="text-sm">Potassium Sorbate: <span className="font-medium">{batch.stabilizers.kSorbate}g</span></p>
                             </div>
                         )}
+                        {batch.stabilizationDate && (
+                            <div className="mb-4">
+                                <p className="text-sm text-gray-600">Stabilization Type</p>
+                                <p className="font-medium text-lg">{stabilizationTypes[batch.stabilizationType]}</p>
+                                <p className="text-xs text-gray-500">{new Date(batch.stabilizationDate).toLocaleDateString()}</p>
+                            </div>
+                        )}
+                        {batch.stabilizationSkipped && (
+                            <div className="mb-4">
+                                <p className="font-medium text-lg">Skipped</p>
+                            </div>
+                        )}
 
-                        {!batch.backsweeteningSG && !batch.bottled && !batch.kegged && (
-                            <>
+                        {!batch.stabilizationDate && (
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => setShowStabilizationForm(true)}
+                                    className="flex-1 bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+                                >
+                                    Stabilize
+                                </button>
+
+                                <button
+                                    onClick={() => skipStabilization()}
+                                    className="flex-1 bg-green-600 text-white py-2 rounded hover:bg-green-700"
+                                >
+                                    Skip Stabilization
+                                </button>
+                            </div>
+                        )}
+
+                        {showStabilizationForm && (
+                            <div className="mt-4 p-4 border rounded bg-gray-50">
+                                <label className="block text-sm font-medium mb-2">Stabilization Type</label>
+                                <select
+                                    value={stabilizationType}
+                                    onChange={(e) => setStabilizationType(e.target.value)}
+                                    className="w-full border rounded px-3 py-2 mb-3"
+                                >
+                                    <option value="pasteurized">Pasteurization</option>
+                                    <option value="chemical_stabilization">Chemical Stabilization</option>
+                                </select>
+                                <div className="flex gap-2">
+                                    <button onClick={handleStabilization} className="flex-1 bg-amber-600 text-white py-2 rounded hover:bg-amber-700">
+                                        Confirm
+                                    </button>
+                                    <button onClick={() => setShowStabilizationForm(false)} className="flex-1 bg-gray-300 text-gray-700 py-2 rounded hover:bg-gray-400">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {batch.stabilizationDate && (
+                    <div className="bg-white rounded-lg shadow p-6 mb-4">
+                        <h3 className="text-xl font-bold mb-4">Backsweetening</h3>
+                        {batch.backsweetenSkipped && (
+                            <p className="font-medium text-lg">Skipped</p>
+                        )}
+                        {batch.backsweetenDate && !batch.backsweetenSkipped && (
+                            <div>
+                                <p className="text-sm">Honey Added: <span className="font-medium">{batch.backsweetenHoneyLbs} lbs</span></p>
+                                {batch.otherBacksweetenIngredients && (
+                                    <div className="col-span-2">
+                                        <p className="text-sm text-gray-600">Other Ingredients</p>
+                                        <p className="font-medium">{batch.otherBacksweetenIngredients}</p>
+                                    </div>
+                                )}
+                                <p className="text-sm mb-4">Final SG: <span className="font-medium">{batch.backsweeteningSG.toFixed(3)}</span></p>
+                            </div>
+                        )}
+
+                        {!batch.backsweetenDate && (
+                            <div className="flex gap-2">
                                 <button
                                     onClick={() => setShowBacksweetenForm(true)}
-                                    className="w-full bg-purple-600 text-white py-2 rounded hover:bg-purple-700 mb-2"
+                                    className="flex-1 bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
                                 >
                                     Backsweeten
                                 </button>
                                 <button
-                                    onClick={() => setShowBottleForm(true)}
-                                    className="w-full bg-amber-600 text-white py-2 rounded hover:bg-amber-700"
+                                    onClick={skipBacksweeten}
+                                    className="flex-1 bg-green-600 text-white py-2 rounded hover:bg-green-700"
                                 >
-                                    Bottle/Keg
+                                    Skip Backsweetening
                                 </button>
-                            </>
+                            </div>
                         )}
 
                         {showBacksweetenForm && (
@@ -580,6 +696,16 @@ const BatchDetail = ({ batch, onBack, onUpdate }) => {
                                     onChange={(e) => setBacksweetAmount(e.target.value)}
                                     className="w-full border rounded px-3 py-2 mb-3"
                                 />
+                                <div>
+                                    <label className="block text-sm font-medium mb-1">Other Ingredients (optional)</label>
+                                    <textarea
+                                        value={otherBacksweetenIngredients}
+                                        onChange={(e) => setOtherBacksweetenIngredients(e.target.value)}
+                                        className="w-full border rounded px-3 py-2"
+                                        rows="3"
+                                        placeholder="e.g., 2 lbs blueberries, vanilla bean, oak cubes"
+                                    />
+                                </div>
                                 <label className="block text-sm font-medium mb-2">Specific Gravity After</label>
                                 <input
                                     type="number"
@@ -602,44 +728,18 @@ const BatchDetail = ({ batch, onBack, onUpdate }) => {
                     </div>
                 )}
 
-                {batch.backsweeteningSG && !batch.bottled && !batch.kegged && (
+                {batch.backsweetenDate && !batch.packageDate && (
                     <div className="bg-white rounded-lg shadow p-6 mb-4">
-                        <h3 className="text-xl font-bold mb-4">Backsweetening</h3>
-                        <p className="text-sm">Honey Added: <span className="font-medium">{batch.backsweetenHoneyLbs} lbs</span></p>
-                        <p className="text-sm mb-4">Final SG: <span className="font-medium">{batch.backsweeteningSG.toFixed(3)}</span></p>
-
                         <button
                             onClick={() => setShowBottleForm(true)}
                             className="w-full bg-amber-600 text-white py-2 rounded hover:bg-amber-700"
                         >
                             Bottle/Keg
                         </button>
-
-                        {showBottleForm && (
-                            <div className="mt-4 p-4 border rounded bg-gray-50">
-                                <label className="block text-sm font-medium mb-2">Package Type</label>
-                                <select
-                                    value={packageType}
-                                    onChange={(e) => setPackageType(e.target.value)}
-                                    className="w-full border rounded px-3 py-2 mb-3"
-                                >
-                                    <option value="bottled">Bottled</option>
-                                    <option value="kegged">Kegged</option>
-                                </select>
-                                <div className="flex gap-2">
-                                    <button onClick={handlePackage} className="flex-1 bg-amber-600 text-white py-2 rounded hover:bg-amber-700">
-                                        Confirm
-                                    </button>
-                                    <button onClick={() => setShowBottleForm(false)} className="flex-1 bg-gray-300 text-gray-700 py-2 rounded hover:bg-gray-400">
-                                        Cancel
-                                    </button>
-                                </div>
-                            </div>
-                        )}
                     </div>
                 )}
 
-                {showBottleForm && !batch.backsweeteningSG && (
+                {showBottleForm && (
                     <div className="bg-white rounded-lg shadow p-6 mb-4">
                         <div className="p-4 border rounded bg-gray-50">
                             <label className="block text-sm font-medium mb-2">Package Type</label>
@@ -663,11 +763,11 @@ const BatchDetail = ({ batch, onBack, onUpdate }) => {
                     </div>
                 )}
 
-                {(batch.bottled || batch.kegged) && (
+                {(batch.packageDate) && (
                     <div className="bg-white rounded-lg shadow p-6">
                         <h3 className="text-xl font-bold mb-4">Finished!</h3>
                         <p className="text-sm">
-                            <span className="font-medium">{batch.bottled ? 'Bottled' : 'Kegged'}</span> on {new Date(batch.packageDate).toLocaleDateString()}
+                            <span className="font-medium">{packageTypes[batch.packageType]}</span> on {new Date(batch.packageDate).toLocaleDateString()}
                         </p>
                         <div className="mt-4 p-3 bg-green-50 rounded">
                             <p className="text-sm font-medium">Batch Summary</p>
