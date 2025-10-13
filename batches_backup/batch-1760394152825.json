@@ -1,0 +1,41 @@
+{
+  "id": 1760394152825,
+  "name": "Coffee",
+  "carboySizeGal": 1,
+  "honeyLbs": 3,
+  "otherIngredients": "1lb of honey - bochet\ncold brew coffee\n",
+  "yeast": "EC-1118",
+  "startDate": "2025-09-14T22:23:53.779Z",
+  "gravityReadings": [],
+  "originalGravity": 1.114,
+  "ogDate": "2025-09-14T22:24:02.830Z",
+  "tosnaSchedule": [
+    {
+      "hours": 24,
+      "amount": "1.20"
+    },
+    {
+      "hours": 48,
+      "amount": "1.20"
+    },
+    {
+      "hours": 72,
+      "amount": "1.20"
+    }
+  ],
+  "finalGravity": 0.998,
+  "fgDate": "2025-09-24T22:24:19.593Z",
+  "abv": "15.23",
+  "stabilizers": {
+    "kMeta": "0.50",
+    "kSorbate": "0.75"
+  },
+  "stabilizationType": "pasteurized",
+  "stabilizationDate": "2025-09-29T22:24:24.574Z",
+  "backsweetenHoneyLbs": 0.5,
+  "backsweeteningSG": 1.018,
+  "otherBacksweetenIngredients": "",
+  "backsweetenDate": "2025-09-29T22:24:49.171Z",
+  "packageType": "bottled",
+  "packageDate": "2025-09-30T22:24:53.582Z"
+}

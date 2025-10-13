@@ -1,0 +1,26 @@
+{
+  "id": 1760388063447,
+  "name": "Blue Blitz",
+  "carboySizeGal": 1.5,
+  "honeyLbs": 2.4,
+  "otherIngredients": "2 lb blueberries ",
+  "yeast": "B72",
+  "startDate": "2025-10-13T20:41:53.724Z",
+  "gravityReadings": [],
+  "originalGravity": 1.092,
+  "ogDate": "2025-10-13T20:42:04.525Z",
+  "tosnaSchedule": [
+    {
+      "hours": 24,
+      "amount": "1.50"
+    },
+    {
+      "hours": 48,
+      "amount": "1.50"
+    },
+    {
+      "hours": 72,
+      "amount": "1.50"
+    }
+  ]
+}

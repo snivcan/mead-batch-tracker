@@ -70,9 +70,9 @@ const BatchCard = ({ batch, onClick }) => {
                 <div>
                     <span className="text-gray-600">Honey:</span> {batch.honeyLbs} lbs
                 </div>
-                {batch.originalGravity && (
+                {batch.backsweeteningSG && (
                     <div>
-                        <span className="text-gray-600">OG:</span> {batch.originalGravity.toFixed(3)}
+                        <span className="text-gray-600">Specific Gravity:</span> {batch.backsweeteningSG.toFixed(3)}
                     </div>
                 )}
                 {batch.finalGravity && batch.abv && (
@@ -232,7 +232,8 @@ const NewBatchForm = ({ onSave, onCancel }) => {
         name: 'Batch #' + id,
         carboySizeGal: 1,
         honeyLbs: '',
-        otherIngredients: ''
+        otherIngredients: '',
+        yeast: ''
     });
 
     const handleSubmit = () => {
@@ -295,6 +296,20 @@ const NewBatchForm = ({ onSave, onCancel }) => {
                             rows="3"
                             placeholder="e.g., 2 lbs blueberries, vanilla bean, oak cubes"
                         />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Yeast</label>
+                        <select
+                            value={formData.yeast}
+                            onChange={(e) => setFormData({ ...formData, yeast: e.target.value })}
+                            className="w-full border rounded px-3 py-2"
+                        >
+                            <option value="">Unknown</option>
+                            <option value="D47">D47</option>
+                            <option value="EC-1118">EC-1118</option>
+                            <option value="71B">71B</option>
+                        </select>
                     </div>
 
                     <div className="flex gap-3">
@@ -434,6 +449,10 @@ const BatchDetail = ({ batch, onBack, onUpdate }) => {
                         <div>
                             <p className="text-sm text-gray-600">Honey</p>
                             <p className="font-medium">{batch.honeyLbs} lbs</p>
+                        </div>
+                        <div>
+                            <p className="text-sm text-gray-600">Yeast</p>
+                            <p className="font-medium">{batch.yeast}</p>
                         </div>
                         {batch.otherIngredients && (
                             <div className="col-span-2">
@@ -773,7 +792,7 @@ const BatchDetail = ({ batch, onBack, onUpdate }) => {
                             <p className="text-sm font-medium">Batch Summary</p>
                             <p className="text-sm">ABV: {batch.abv}%</p>
                             {batch.backsweeteningSG && (
-                                <p className="text-sm">Final SG: {batch.backsweeteningSG.toFixed(3)}</p>
+                                <p className="text-sm">Final Specific Gravity: {batch.backsweeteningSG.toFixed(3)}</p>
                             )}
                         </div>
                     </div>

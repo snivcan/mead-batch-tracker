@@ -1,0 +1,41 @@
+{
+  "id": 1757725200000,
+  "name": "Viking Blood",
+  "carboySizeGal": 1.5,
+  "honeyLbs": 3,
+  "otherIngredients": "1.2 kg frozen cherry",
+  "yeast": "71B",
+  "startDate": "2025-09-13T22:14:46.720Z",
+  "gravityReadings": [],
+  "originalGravity": 1.112,
+  "ogDate": "2025-10-13T22:14:56.078Z",
+  "tosnaSchedule": [
+    {
+      "hours": 24,
+      "amount": "1.80"
+    },
+    {
+      "hours": 48,
+      "amount": "1.80"
+    },
+    {
+      "hours": 72,
+      "amount": "1.80"
+    }
+  ],
+  "finalGravity": 0.993,
+  "fgDate": "2025-09-24T22:15:22.398Z",
+  "abv": "15.62",
+  "stabilizers": {
+    "kMeta": "0.75",
+    "kSorbate": "1.13"
+  },
+  "stabilizationType": "pasteurized",
+  "stabilizationDate": "2025-09-29T22:15:34.674Z",
+  "backsweetenHoneyLbs": 0.2,
+  "backsweeteningSG": 1.002,
+  "otherBacksweetenIngredients": "8oz dry cherries",
+  "backsweetenDate": "2025-09-29T22:16:51.581Z",
+  "packageType": "bottled",
+  "packageDate": "2025-10-01T22:16:56.615Z"
+}

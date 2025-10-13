@@ -1,0 +1,41 @@
+{
+  "id": 1760394490703,
+  "name": "zesty",
+  "carboySizeGal": 1,
+  "honeyLbs": 3,
+  "otherIngredients": "2 lime juice\n2 lime, 1 orange, 1 lemon - zest\n0.5 tsp tannin",
+  "yeast": "D47",
+  "startDate": "2025-09-27T22:29:52.128Z",
+  "gravityReadings": [],
+  "originalGravity": 1.086,
+  "ogDate": "2025-10-13T22:30:09.263Z",
+  "tosnaSchedule": [
+    {
+      "hours": 24,
+      "amount": "1.00"
+    },
+    {
+      "hours": 48,
+      "amount": "1.00"
+    },
+    {
+      "hours": 72,
+      "amount": "1.00"
+    }
+  ],
+  "finalGravity": 0.992,
+  "fgDate": "2025-10-13T22:30:27.922Z",
+  "abv": "12.34",
+  "stabilizers": {
+    "kMeta": "0.50",
+    "kSorbate": "0.75"
+  },
+  "stabilizationType": "pasteurized",
+  "stabilizationDate": "2025-10-13T22:30:36.652Z",
+  "backsweetenHoneyLbs": null,
+  "backsweeteningSG": 1.008,
+  "otherBacksweetenIngredients": "",
+  "backsweetenDate": "2025-10-13T22:31:28.634Z",
+  "packageType": "bottled",
+  "packageDate": "2025-10-13T22:31:33.222Z"
+}

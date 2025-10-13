@@ -1,0 +1,40 @@
+{
+  "id": 1760310868381,
+  "name": "Tart Tummy Teaser",
+  "carboySizeGal": 1,
+  "honeyLbs": 2,
+  "otherIngredients": "96 oz Cranberry Juice",
+  "startDate": "2025-08-23T23:15:03.209Z",
+  "gravityReadings": [],
+  "originalGravity": 1.116,
+  "ogDate": "2025-08-23T23:15:16.769Z",
+  "tosnaSchedule": [
+    {
+      "hours": 24,
+      "amount": "1.20"
+    },
+    {
+      "hours": 48,
+      "amount": "1.20"
+    },
+    {
+      "hours": 72,
+      "amount": "1.20"
+    }
+  ],
+  "finalGravity": 1.024,
+  "fgDate": "2025-09-06T23:15:29.034Z",
+  "abv": "12.08",
+  "stabilizers": {
+    "kMeta": "0.50",
+    "kSorbate": "0.75"
+  },
+  "stabilizationType": "pasteurized",
+  "stabilizationDate": "2025-09-13T23:15:47.148Z",
+  "backsweetenHoneyLbs": 0,
+  "backsweeteningSG": 1.06,
+  "otherBacksweetenIngredients": "1lb dry cherries",
+  "backsweetenDate": "2025-09-06T23:16:51.134Z",
+  "packageType": "bottled",
+  "packageDate": "2025-09-13T23:16:56.199Z"
+}
