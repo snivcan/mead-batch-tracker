@@ -30,9 +30,11 @@ const calculateTOSNA3Schedule = (carboySizeGal, honeyLbs, og) => {
 };
 
 const calculateStabilizers = (carboySizeGal) => {
+    const kMetaGr = (carboySizeGal * 0.5)
     return {
-        kMeta: (carboySizeGal * 0.5).toFixed(2),
-        kSorbate: (carboySizeGal * 0.75).toFixed(2)
+        kMeta: kMetaGr.toFixed(2),
+        kSorbate: (carboySizeGal * 0.75).toFixed(2),
+        kMetaTsp: kMetaGr / 1.5
     };
 };
 
@@ -610,7 +612,7 @@ const BatchDetail = ({ batch, onBack, onUpdate }) => {
                         {batch.stabilizers && (
                             <div className="p-3 bg-purple-50 rounded mb-4">
                                 <h4 className="font-semibold mb-2">Stabilizers Needed</h4>
-                                <p className="text-sm">Potassium Metabisulfite: <span className="font-medium">{batch.stabilizers.kMeta}g</span></p>
+                                <p className="text-sm">Potassium Metabisulfite: <span className="font-medium">{batch.stabilizers.kMeta}g  or  {batch.stabilizers.kMetaTsp}tsp</span></p>
                                 <p className="text-sm">Potassium Sorbate: <span className="font-medium">{batch.stabilizers.kSorbate}g</span></p>
                             </div>
                         )}
