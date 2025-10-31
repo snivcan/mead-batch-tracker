@@ -1,0 +1,26 @@
+{
+  "id": 1761754512851,
+  "name": "Blue Berry",
+  "carboySizeGal": 5,
+  "honeyLbs": 6.5,
+  "otherIngredients": "3 kg honey, 4kg blue berry",
+  "yeast": "71B",
+  "startDate": "2025-10-29T16:22:04.360Z",
+  "gravityReadings": [],
+  "originalGravity": 1.06,
+  "ogDate": "2025-10-29T16:22:15.253Z",
+  "tosnaSchedule": [
+    {
+      "hours": 24,
+      "amount": "5.00"
+    },
+    {
+      "hours": 48,
+      "amount": "5.00"
+    },
+    {
+      "hours": 72,
+      "amount": "5.00"
+    }
+  ]
+}

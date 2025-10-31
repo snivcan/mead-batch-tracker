@@ -6,7 +6,12 @@
   "otherIngredients": "2 lb blueberries ",
   "yeast": "B72",
   "startDate": "2025-10-13T20:41:53.724Z",
-  "gravityReadings": [],
+  "gravityReadings": [
+    {
+      "date": "2025-10-26T00:58:23.330Z",
+      "gravity": 0.998
+    }
+  ],
   "originalGravity": 1.092,
   "ogDate": "2025-10-13T20:42:04.525Z",
   "tosnaSchedule": [
@@ -22,5 +27,21 @@
       "hours": 72,
       "amount": "1.50"
     }
-  ]
+  ],
+  "finalGravity": 0.992,
+  "fgDate": "2025-10-27T23:59:33.851Z",
+  "abv": "13.13",
+  "stabilizers": {
+    "kMeta": "0.75",
+    "kSorbate": "1.13",
+    "kMetaTsp": 0.5
+  },
+  "stabilizationType": "pasteurized",
+  "stabilizationDate": "2025-10-27T23:59:45.494Z",
+  "backsweetenHoneyLbs": null,
+  "backsweeteningSG": 1.02,
+  "otherBacksweetenIngredients": "a bit of honey + 1lb (600gr to be exact) blueberry",
+  "backsweetenDate": "2025-10-28T00:00:34.922Z",
+  "packageType": "bottled",
+  "packageDate": "2025-10-29T16:15:00.027Z"
 }
