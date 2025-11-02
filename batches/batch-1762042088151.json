@@ -1,0 +1,26 @@
+{
+  "id": 1762042088151,
+  "name": "Juniper++",
+  "carboySizeGal": 1,
+  "honeyLbs": 3,
+  "otherIngredients": "",
+  "yeast": "EC-1118",
+  "startDate": "2025-11-02T00:08:39.893Z",
+  "gravityReadings": [],
+  "originalGravity": 1.112,
+  "ogDate": "2025-11-02T00:08:51.686Z",
+  "tosnaSchedule": [
+    {
+      "hours": 24,
+      "amount": "1.20"
+    },
+    {
+      "hours": 48,
+      "amount": "1.20"
+    },
+    {
+      "hours": 72,
+      "amount": "1.20"
+    }
+  ]
+}
